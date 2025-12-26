@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wuli布雷克 - 物理模拟实验室</title>
+    <style>
+        :root {
+            --bg-color: #fffaf5;
+            --primary-warm: #ff9800;
+            --accent-warm: #f57c00;
+            --text-main: #3e2723;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'PingFang SC', system-ui, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* 专属徽标 */
+        header {
+            width: 100%;
+            padding: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .brand-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-main {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #fff;
+            background: linear-gradient(135deg, var(--accent-warm), var(--primary-warm));
+            padding: 10px 25px;
+            border-radius: 15px 15px 15px 0;
+            box-shadow: 5px 5px 20px rgba(245, 124, 0, 0.2);
+        }
+
+        .logo-sub {
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            color: var(--accent-warm);
+            margin-top: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .intro {
+            text-align: center;
+            max-width: 600px;
+            padding: 0 20px;
+            color: #795548;
+            line-height: 1.6;
+        }
+
+        /* 导航卡片网格 */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            width: 90%;
+            max-width: 1000px;
+            padding: 40px 0;
+        }
+
+        .sim-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,152,0,0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .sim-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(245, 124, 0, 0.15);
+            border-color: var(--primary-warm);
+        }
+
+        .sim-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.4rem;
+            color: var(--accent-warm);
+        }
+
+        .sim-card p {
+            font-size: 0.95rem;
+            color: #6d4c41;
+            margin-bottom: 20px;
+        }
+
+        .sim-card .tag {
+            font-size: 0.8rem;
+            background: #fff3e0;
+            color: var(--accent-warm);
+            padding: 4px 12px;
+            border-radius: 20px;
+            align-self: flex-start;
+            font-weight: bold;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 40px;
+            font-size: 0.85rem;
+            color: #a1887f;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-logo">
+            <div class="logo-main">Wuli布雷克</div>
+            <div class="logo-sub">Physics Lab Portal</div>
+        </div>
+        <div class="intro">
+            欢迎来到我的物理模拟实验室！在这里，你可以通过直观的交互程序探索复杂的物理公式和现象。
+        </div>
+    </header>
+
+    <main class="grid-container">
+        
+        <a href="resistor.html" class="sim-card">
+            <div>
+                <h3>电阻计算公式</h3>
+                <p>动态演示电阻率、长度和截面积如何影响导线电阻。支持科学计数法显示。</p>
+            </div>
+            <span class="tag">电学 / Electricity</span>
+        </a>
+
+        <a href="#" class="sim-card" style="opacity: 0.6; pointer-events: none;">
+            <div>
+                <h3>新程序开发中...</h3>
+                <p>更多精彩的物理模拟程序正在制作中，敬请期待。</p>
+            </div>
+            <span class="tag">即将到来</span>
+        </a>
+
+    </main>
+
+    <footer>
+        © 2025 Wuli布雷克 | 由 HTML5 & CSS3 驱动
+    </footer>
+
+</body>
+</html>
