@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,10 +10,14 @@
             --bg-color: #fffaf5;
             --primary-warm: #ff9800;
             --accent-warm: #f57c00;
-            --color-r: #d32f2f; /* 电阻 - 红 */
-            --color-rho: #7b1fa2; /* 电阻率 - 紫 */
-            --color-l: #2e7d32; /* 长度 - 绿 */
-            --color-a: #1565c0; /* 面积 - 蓝 */
+            --color-r: #d32f2f;
+            /* 电阻 - 红 */
+            --color-rho: #7b1fa2;
+            /* 电阻率 - 紫 */
+            --color-l: #2e7d32;
+            /* 长度 - 绿 */
+            --color-a: #1565c0;
+            /* 面积 - 蓝 */
             --text-main: #3e2723;
         }
 
@@ -27,30 +32,23 @@
         }
 
         /* 专属标志设计 */
-        .brand-logo {
+        .watermark {
             position: absolute;
             top: 30px;
             left: 30px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .logo-main {
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: #fff;
-            background: linear-gradient(135deg, var(--accent-warm), var(--primary-warm));
-            padding: 8px 20px;
-            border-radius: 12px 12px 12px 0;
-            box-shadow: 4px 4px 15px rgba(245, 124, 0, 0.2);
-        }
-
-        .logo-sub {
-            font-size: 0.75rem;
-            letter-spacing: 3px;
-            color: var(--accent-warm);
-            margin-top: 6px;
+            background: #ff8c00;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 1.6em;
             font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
+            z-index: 1000;
+            font-family: 'Segoe UI', 'PingFang SC', sans-serif;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .main-container {
@@ -59,8 +57,8 @@
             max-width: 750px;
             padding: 45px;
             border-radius: 35px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.06);
-            border: 1px solid rgba(255,152,0,0.15);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(255, 152, 0, 0.15);
         }
 
         h1 {
@@ -90,11 +88,26 @@
             gap: 15px;
         }
 
-        .symbol { transition: transform 0.2s ease-out; display: inline-block; }
-        .sym-r { color: var(--color-r); }
-        .sym-rho { color: var(--color-rho); }
-        .sym-l { color: var(--color-l); }
-        .sym-a { color: var(--color-a); }
+        .symbol {
+            transition: transform 0.2s ease-out;
+            display: inline-block;
+        }
+
+        .sym-r {
+            color: var(--color-r);
+        }
+
+        .sym-rho {
+            color: var(--color-rho);
+        }
+
+        .sym-l {
+            color: var(--color-l);
+        }
+
+        .sym-a {
+            color: var(--color-a);
+        }
 
         .fraction {
             display: flex;
@@ -125,7 +138,7 @@
         #wire-bar {
             background: linear-gradient(to bottom, #e2a76f, #b87333, #8b4513);
             border-radius: 6px;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
         }
 
         /* 纵向排列控件区 */
@@ -164,10 +177,11 @@
             border-radius: 10px;
             min-width: 140px;
             text-align: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        select, input[type="range"] {
+        select,
+        input[type="range"] {
             width: 100%;
             height: 45px;
             cursor: pointer;
@@ -196,12 +210,10 @@
         }
     </style>
 </head>
+
 <body>
 
-    <div class="brand-logo">
-        <div class="logo-main">Wuli布雷克</div>
-        <div class="logo-sub">PHYSICS LAB</div>
-    </div>
+    <div class="watermark">Wuli布雷克</div>
 
     <div class="main-container">
         <h1>电阻计算公式 / Resistance Formula</h1>
@@ -224,7 +236,7 @@
         </div>
 
         <div class="control-panel">
-            
+
             <div class="control-block">
                 <div class="label-row">
                     <span class="label-text">1. 电阻率 / Resistivity (ρ)</span>
@@ -322,4 +334,5 @@
         update();
     </script>
 </body>
+
 </html>

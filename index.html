@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -83,9 +84,9 @@
             padding: 30px;
             text-decoration: none;
             color: inherit;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
-            border: 1px solid rgba(255,152,0,0.1);
+            border: 1px solid rgba(255, 152, 0, 0.1);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -127,6 +128,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <header>
@@ -140,12 +142,12 @@
     </header>
 
     <main class="grid-container">
-        
+
 
         <a href="density.html" class="sim-card">
             <div>
                 <h3>密度计算公式</h3>
-                <p>动态演示质量和体积如何影响物体密度。</p>
+                <p>动态演示质量和体积如何影响物体密度。Density = m / V</p>
             </div>
             <span class="tag">力学 / Mechanics</span>
         </a>
@@ -153,25 +155,65 @@
         <a href="pressure.html" class="sim-card">
             <div>
                 <h3>压强计算公式</h3>
-                <p>动态演示压力和面积如何影响压强。</p>
+                <p>动态演示压力和面积如何影响压强。P = F / S</p>
             </div>
             <span class="tag">力学 / Mechanics</span>
         </a>
 
-       <a href="resistor.html" class="sim-card">
+        <a href="LiquidPressure.html" class="sim-card">
+            <div>
+                <h3>液体压强公式</h3>
+                <p>液体的深度、密度与压强的关系。P = ρgh</p>
+            </div>
+            <span class="tag">力学 / Mechanics</span>
+        </a>
+
+        <a href="upthrust.html" class="sim-card">
+            <div>
+                <h3>阿基米德原理</h3>
+                <p>探索浮力与排开液体重力的关系。F = ρgV</p>
+            </div>
+            <span class="tag">力学 / Mechanics</span>
+        </a>
+
+        <a href="HookesLaw.html" class="sim-card">
+            <div>
+                <h3>胡克定律</h3>
+                <p>弹力与伸长量的线性关系模拟。F = kx</p>
+            </div>
+            <span class="tag">力学 / Mechanics</span>
+        </a>
+
+        <a href="NewtonLaw.html" class="sim-card">
+            <div>
+                <h3>牛顿运动定律</h3>
+                <p>综合演示惯性、F=ma及作用力与反作用力。</p>
+            </div>
+            <span class="tag">力学 / Mechanics</span>
+        </a>
+
+        <a href="AlphaScattering.html" class="sim-card">
+            <div>
+                <h3>卢瑟福散射实验</h3>
+                <p>α粒子散射实验模拟，探索原子核结构。</p>
+            </div>
+            <span class="tag">原子物理 / Atomic</span>
+        </a>
+
+        <a href="resistor.html" class="sim-card">
             <div>
                 <h3>电阻计算公式</h3>
-                <p>动态演示电阻率、长度和截面积如何影响导线电阻。支持科学计数法显示。</p>
+                <p>演示电阻率、长度和截面积如何影响电阻。R = ρL/A</p>
             </div>
             <span class="tag">电学 / Electricity</span>
         </a>
 
-        <a href="#" class="sim-card" style="opacity: 0.6; pointer-events: none;">
+        <a href="#" class="sim-card upcoming" style="opacity: 0.9; cursor: default;">
             <div>
-                <h3>新程序开发中...</h3>
+                <h3 style="color: #ff9d5c;">新程序开发中...</h3>
                 <p>更多精彩的物理模拟程序正在制作中，敬请期待。</p>
             </div>
-            <span class="tag">即将到来</span>
+            <span class="tag" style="background: #fff4e6; color: #ff9d5c;">即将到来</span>
         </a>
 
     </main>
@@ -181,4 +223,5 @@
     </footer>
 
 </body>
+
 </html>
