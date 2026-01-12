@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>冲量 / Impulse - Wuli布雷克</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Noto+Sans+SC:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #FFF9F0;
+            --primary: #FF8c42;
+            --secondary: #FFC75F;
+            --accent: #FF5E5B;
+            --text-dark: #4A403A;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 20px rgba(255, 140, 66, 0.15);
+            --radius: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Fredoka', 'Noto Sans SC', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px 20px 40px 20px;
+        }
+
+        /* Branding */
+        .branding {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #FFFFFF;
+            background: var(--primary);
+            padding: 8px 18px;
+            border-radius: 12px;
+            box-shadow: 2px 2px 10px rgba(255, 140, 66, 0.3);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin-top: 60px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            flex-grow: 1;
+        }
+
+        /* Title Section */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        /* Formula Area */
+        .formula-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 120px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .formula-part {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            color: var(--text-dark);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin: 0 5px;
+        }
+
+        .symbol {
+            display: inline-block;
+            transition: font-size 0.2s ease, transform 0.2s ease;
+        }
+
+        .equals,
+        .times {
+            font-size: 2rem;
+            color: #ccc;
+            margin: 0 15px;
+        }
+
+        /* Simulation Area */
+        .simulation-area {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+            flex-grow: 1;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Controls */
+        .controls-overlay {
+            padding: 20px 40px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 25px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .val-badge {
+            background: #fff5eb;
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        input[type=range] {
+            width: 100%;
+            appearance: none;
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        input[type=range]::-webkit-slider-thumb:hover {
+            background: #ff7a2f;
+            transform: scale(1.1);
+        }
+
+        .ctrl-btn {
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+
+        .ctrl-btn:active {
+            transform: translateY(2px);
+            box-shadow: none;
+        }
+
+        .start {
+            background-color: #2ecc71;
+        }
+
+        .start:hover {
+            background-color: #27ae60;
+        }
+
+        .reset {
+            background-color: #95a5a6;
+        }
+
+        .reset:hover {
+            background-color: #7f8c8d;
+        }
+
+        .f-color {
+            color: #e74c3c;
+        }
+
+        .t-color {
+            color: #f39c12;
+        }
+
+        .m-color {
+            color: #3498db;
+        }
+
+        .i-color {
+            color: #9b59b6;
+        }
+
+        .dp-color {
+            color: #8e44ad;
+        }
+
+        /* Gauge Area */
+        .gauges-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .gauge-wrapper {
+            position: relative;
+            width: 160px;
+            height: 100px;
+            /* Half circle height */
+            text-align: center;
+        }
+
+        .gauge-label {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        @media (max-width: 900px) {
+            .controls-overlay {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="branding">
+        <div class="logo">Wuli布雷克</div>
+    </div>
+
+    <header>
+        <h1>冲量 Impulse</h1>
+    </header>
+
+    <div class="container">
+        <!-- Dynamic Formula -->
+        <div class="formula-card">
+            <div class="formula-part">
+                <span class="symbol i-color" id="sym-i" style="font-size: 3rem;">I</span>
+                <span style="font-size: 1rem; color: #999; margin-left: 5px;">(冲量)</span>
+            </div>
+            <div class="equals">=</div>
+            <div class="formula-part">
+                <span class="symbol f-color" id="sym-f" style="font-size: 2rem;">F</span>
+                <span style="font-size: 1rem; color: #999; margin-left: 5px;">(力)</span>
+            </div>
+            <div class="times">×</div>
+            <div class="formula-part">
+                <span class="symbol t-color" id="sym-t" style="font-size: 2rem;">t</span>
+                <span style="font-size: 1rem; color: #999; margin-left: 5px;">(时间)</span>
+            </div>
+            <div class="equals">=</div>
+            <div class="formula-part">
+                <span class="symbol" style="font-size: 2rem; color: #333;">Δp</span>
+                <span style="font-size: 1rem; color: #999; margin-left: 5px;">(动量变化)</span>
+            </div>
+        </div>
+
+        <!-- Simulation -->
+        <div class="simulation-area">
+            <canvas id="simCanvas"></canvas>
+
+            <div class="controls-overlay">
+                <!-- Force Control -->
+                <div class="control-group">
+                    <div class="label-row f-color">
+                        <span>Force (力)</span>
+                        <span id="f-val" class="val-badge">50 N</span>
+                    </div>
+                    <input type="range" id="f-slider" min="10" max="100" value="50">
+                </div>
+
+                <!-- Time Control -->
+                <div class="control-group">
+                    <div class="label-row t-color">
+                        <span>Time (作用时间)</span>
+                        <span id="t-val" class="val-badge">2.0 s</span>
+                    </div>
+                    <input type="range" id="t-slider" min="0.1" max="3.0" step="0.1" value="2.0">
+                </div>
+
+                <!-- Mass Control -->
+                <div class="control-group">
+                    <div class="label-row m-color">
+                        <span>Mass (质量)</span>
+                        <span id="m-val" class="val-badge">20 kg</span>
+                    </div>
+                    <input type="range" id="m-slider" min="10" max="1000" value="20">
+                </div>
+
+                <!-- Button Group -->
+                <div class="control-group"
+                    style="grid-column: 1 / -1; display: flex; flex-direction: row; gap: 20px; justify-content: center;">
+                    <button id="btn-start" class="ctrl-btn start" style="max-width: 200px;">开始 Start</button>
+                    <button id="btn-reset" class="ctrl-btn reset" style="max-width: 200px;">重置 Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const sliderF = document.getElementById('f-slider');
+        const sliderT = document.getElementById('t-slider');
+        const sliderM = document.getElementById('m-slider');
+
+        const valF = document.getElementById('f-val');
+        const valT = document.getElementById('t-val');
+        const valM = document.getElementById('m-val');
+
+        const symF = document.getElementById('sym-f');
+        const symT = document.getElementById('sym-t');
+        const symI = document.getElementById('sym-i');
+
+        const btnStart = document.getElementById('btn-start');
+        const btnReset = document.getElementById('btn-reset');
+
+        const state = {
+            F: 50,
+            tTarget: 2.0,
+            m: 20,
+
+            // Physics State
+            timeElapsed: 0,
+            pos: 100, // Start with some margin
+            vel: 0,
+            isPlaying: false,
+            isFinished: false
+        };
+
+        function resize() {
+            const parent = canvas.parentElement;
+            canvas.width = parent.clientWidth;
+            canvas.height = Math.max(400, parent.clientHeight - 180);
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        function update() {
+            // Update UI Labels
+            valF.textContent = state.F + ' N';
+            valT.textContent = state.tTarget + ' s';
+            valM.textContent = state.m + ' kg';
+
+            // Dynamic Formula
+            symF.style.fontSize = (1.5 + state.F / 200) + 'rem';
+            symT.style.fontSize = (1.5 + state.tTarget / 5) + 'rem';
+            const impulse = state.F * state.tTarget;
+            symI.style.fontSize = (2 + Math.sqrt(impulse) / 15) + 'rem';
+
+            // Physics Loop if playing
+            if (state.isPlaying) {
+                const dt = 1 / 60; // Assume 60fps for simplicity
+
+                // Check if force is still active
+                if (state.timeElapsed < state.tTarget) {
+                    state.timeElapsed += dt;
+                    // a = F / m
+                    const acc = state.F / state.m;
+                    // v = v0 + at
+                    state.vel += acc * dt;
+                } else {
+                    // Force stopped, moving at constant velocity
+                    state.isFinished = true;
+                }
+
+                // x = x0 + vt
+                // Scale factor for visualization pixels
+                state.pos += state.vel * 2;
+
+                // Reset loop if off screen
+                if (state.pos > canvas.width + 200) {
+                    state.isPlaying = false; // Stop when out of view
+                }
+            }
+
+            draw();
+            requestAnimationFrame(update);
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const cy = canvas.height / 2 + 50;
+
+            // Draw Floor
+            ctx.beginPath();
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 2;
+            ctx.moveTo(0, cy);
+            ctx.lineTo(canvas.width, cy);
+            ctx.stroke();
+
+            // Draw Block
+            const logMass = Math.log10(state.m);
+            const size = 30 + 50 * (logMass - 1);
+
+            const x = state.pos;
+            const y = cy - size;
+
+            // Block Shadow
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = 'rgba(0,0,0,0.15)';
+            ctx.fillStyle = '#3498db';
+            ctx.fillRect(x, y, size, size);
+            ctx.shadowBlur = 0;
+
+            // Block bevel/highlight
+            ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(x + 2, y + 2, size - 4, size - 4);
+
+            // Force Arrow (Pushing)
+            if (state.isPlaying && state.timeElapsed < state.tTarget) {
+                const arrowLen = 50 + state.F;
+                const arrowY = y + size / 2;
+                const arrowEnd = x;
+                const arrowStart = x - arrowLen;
+
+                // Glowing effect for force
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = 'rgba(231, 76, 60, 0.6)';
+                ctx.strokeStyle = '#e74c3c';
+                ctx.lineWidth = 8;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(arrowStart, arrowY);
+                ctx.lineTo(arrowEnd - 5, arrowY); // Stop before head
+                ctx.stroke();
+                ctx.lineCap = 'butt';
+
+                // Arrow head
+                ctx.fillStyle = '#e74c3c';
+                ctx.beginPath();
+                ctx.moveTo(arrowEnd, arrowY);
+                ctx.lineTo(arrowEnd - 18, arrowY - 12);
+                ctx.lineTo(arrowEnd - 18, arrowY + 12);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                // Label F
+                ctx.fillStyle = '#e74c3c';
+                ctx.font = '700 16px "Noto Sans SC"';
+                ctx.textAlign = 'right';
+                ctx.fillText(`F = ${state.F}N`, arrowStart - 10, arrowY + 5);
+            }
+
+            // Info HUD Area
+            // Timer Progress Bar - Enhanced
+            ctx.textAlign = 'left';
+            ctx.font = '600 14px "Fredoka"';
+            ctx.fillStyle = '#666';
+            const timeDisplay = Math.min(state.timeElapsed, state.tTarget).toFixed(2);
+            ctx.fillText(`Time: ${timeDisplay}s / ${state.tTarget}s`, 20, 35);
+
+            const barW = 220;
+            const barH = 14;
+            const barX = 20;
+            const barY = 45;
+
+            // Bar Background
+            ctx.fillStyle = '#f0f0f0';
+            ctx.beginPath();
+            ctx.roundRect(barX, barY, barW, barH, 7);
+            ctx.fill();
+
+            // Bar Fill
+            const progress = Math.min(state.timeElapsed / state.tTarget, 1.0);
+            if (progress > 0) {
+                const grad = ctx.createLinearGradient(barX, 0, barX + barW, 0);
+                grad.addColorStop(0, '#f1c40f');
+                grad.addColorStop(1, '#f39c12');
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.roundRect(barX, barY, barW * progress, barH, 7);
+                ctx.fill();
+            }
+
+            // Bar Border
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.roundRect(barX, barY, barW, barH, 7);
+            ctx.stroke();
+
+            // Dynamic Delta P Display
+            const currentP = state.m * state.vel;
+            ctx.textAlign = 'center';
+            const cx = canvas.width / 2;
+
+            ctx.font = '700 24px "Fredoka"';
+            ctx.fillStyle = '#8e44ad';
+
+            const dpText = `Δp = ${(currentP).toFixed(1)} kg·m/s`;
+            ctx.fillText(dpText, cx, 100);
+
+            // Draw Gauges
+            drawGauge(canvas.width - 250, 80, currentP, 4000, 'Momentum (kg·m/s)', '#9b59b6');
+            drawGauge(canvas.width - 90, 80, state.vel, 50, 'Velocity (m/s)', '#e74c3c');
+        }
+
+        function drawGauge(cx, cy, value, max, label, color) {
+            const r = 50;
+            const startAngle = Math.PI;
+            const endAngle = 2 * Math.PI;
+
+            // Background Arc
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, startAngle, endAngle);
+            ctx.lineWidth = 10;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#f0f0f0';
+            ctx.stroke();
+
+            // Value Arc
+            const portion = Math.min(value / max, 1);
+            const valAngle = startAngle + portion * Math.PI;
+
+            // Gradient for arc
+            const grad = ctx.createLinearGradient(cx - r, cy, cx + r, cy);
+            grad.addColorStop(0, color);
+            // Lighten the end color slightly simulating shine
+            grad.addColorStop(1, adjustColor(color, 20));
+
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, startAngle, valAngle);
+            ctx.strokeStyle = grad;
+            ctx.stroke();
+
+            // Label
+            ctx.textAlign = 'center';
+            ctx.font = '600 12px "Fredoka"';
+            ctx.fillStyle = '#888';
+            ctx.fillText(label, cx, cy + 25);
+
+            // Value Text (Big)
+            ctx.fillStyle = color;
+            ctx.font = '700 20px "Fredoka"';
+            ctx.fillText(value.toFixed(1), cx, cy - 10);
+        }
+
+        // Helper to lighten/darken color
+        function adjustColor(color, amount) {
+            return color;
+            // Simplified for now as full hex math is complex in canvas without helper libs, 
+            // but the linear gradient above handles the main visual lift.
+        }
+
+        // Event Listeners
+        sliderF.addEventListener('input', (e) => {
+            state.F = parseInt(e.target.value);
+            resetSim();
+        });
+        sliderT.addEventListener('input', (e) => {
+            state.tTarget = parseFloat(e.target.value);
+            resetSim();
+        });
+        sliderM.addEventListener('input', (e) => {
+            state.m = parseInt(e.target.value);
+            resetSim();
+        });
+
+        btnStart.addEventListener('click', () => {
+            if (!state.isPlaying && state.pos < canvas.width) {
+                state.isPlaying = true;
+                if (state.isFinished) resetSim(true); // Restart if finished
+            }
+        });
+
+        btnReset.addEventListener('click', () => resetSim());
+
+        function resetSim(startNow = false) {
+            state.timeElapsed = 0;
+            state.pos = 100;
+            state.vel = 0;
+            state.isFinished = false;
+            state.isPlaying = startNow;
+        }
+
+        update();
+
+    </script>
+</body>
+
+</html>

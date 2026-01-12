@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动量 / Momentum - Wuli布雷克</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Noto+Sans+SC:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #FFF9F0;
+            --primary: #FF8c42;
+            --secondary: #FFC75F;
+            --accent: #FF5E5B;
+            --text-dark: #4A403A;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 20px rgba(255, 140, 66, 0.15);
+            --radius: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Fredoka', 'Noto Sans SC', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px 20px 40px 20px;
+        }
+
+        /* Branding */
+        .branding {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #FFFFFF;
+            background: var(--primary);
+            padding: 8px 18px;
+            border-radius: 12px;
+            box-shadow: 2px 2px 10px rgba(255, 140, 66, 0.3);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin-top: 60px;
+            display: grid;
+            grid-template-columns: 1fr;
+            /* Full width layout as requested */
+            gap: 25px;
+            flex-grow: 1;
+            /* Make it fill available space */
+        }
+
+        /* Title Section */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: 400;
+        }
+
+        /* Formula Area */
+        .formula-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 120px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .formula-part {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            color: var(--text-dark);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin: 0 5px;
+        }
+
+        .symbol {
+            display: inline-block;
+            transition: font-size 0.2s ease, transform 0.2s ease;
+        }
+
+        .equals,
+        .times {
+            font-size: 2rem;
+            color: #ccc;
+            margin: 0 15px;
+        }
+
+        /* Simulation Area */
+        .simulation-area {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 0;
+            /* Let canvas fill */
+            position: relative;
+            overflow: hidden;
+            flex-grow: 1;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Controls Overlay or Bottom Section */
+        .controls-overlay {
+            padding: 20px 40px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .val-badge {
+            background: #fff5eb;
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        input[type=range] {
+            width: 100%;
+            appearance: none;
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        input[type=range]::-webkit-slider-thumb:hover {
+            background: #ff7a2f;
+            transform: scale(1.1);
+        }
+
+        .m-color {
+            color: #3498db;
+        }
+
+        .v-color {
+            color: #e74c3c;
+        }
+
+        .p-color {
+            color: #9b59b6;
+        }
+
+        .ctrl-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .ctrl-btn:active {
+            transform: translateY(2px);
+            box-shadow: none;
+        }
+
+        .start {
+            background-color: #2ecc71;
+        }
+
+        .start:hover {
+            background-color: #27ae60;
+        }
+
+        .pause {
+            background-color: #f1c40f;
+            color: #4A403A;
+        }
+
+        .pause:hover {
+            background-color: #f39c12;
+        }
+
+        .reset {
+            background-color: #95a5a6;
+        }
+
+        .reset:hover {
+            background-color: #7f8c8d;
+        }
+
+        @media (max-width: 800px) {
+            .controls-overlay {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="branding">
+        <div class="logo">Wuli布雷克</div>
+    </div>
+
+    <header>
+        <h1>动量 Momentum</h1>
+    </header>
+
+    <div class="container">
+        <!-- Dynamic Formula -->
+        <div class="formula-card">
+            <div class="formula-part">
+                <span class="symbol p-color" id="sym-p" style="font-size: 3rem;">p</span>
+                <span style="font-size: 1rem; color: #999; margin-left: 5px;">(动量)</span>
+            </div>
+            <div class="equals">=</div>
+            <div class="formula-part">
+                <span class="symbol m-color" id="sym-m" style="font-size: 2rem;">m</span>
+                <span style="font-size: 1rem; color: #999; margin-left: 5px;">(质量)</span>
+            </div>
+            <div class="times">×</div>
+            <div class="formula-part">
+                <span class="symbol v-color" id="sym-v" style="font-size: 2rem;">v</span>
+                <span style="font-size: 1rem; color: #999; margin-left: 5px;">(速度)</span>
+            </div>
+        </div>
+
+        <!-- Simulation -->
+        <div class="simulation-area">
+            <canvas id="simCanvas"></canvas>
+
+            <div class="controls-overlay">
+                <!-- Mass Control -->
+                <div class="control-group">
+                    <div class="label-row m-color">
+                        <span>Mass (质量)</span>
+                        <span id="m-val" class="val-badge">10 kg</span>
+                    </div>
+                    <input type="range" id="m-slider" min="1" max="100" value="20">
+                </div>
+
+                <!-- Velocity Control -->
+                <div class="control-group">
+                    <div class="label-row v-color">
+                        <span>Velocity (速度)</span>
+                        <span id="v-val" class="val-badge">10 m/s</span>
+                    </div>
+                    <input type="range" id="v-slider" min="0" max="50" value="10">
+                    <!-- Buttons -->
+                    <div class="button-group"
+                        style="grid-column: 1 / -1; display: flex; gap: 15px; justify-content: center;">
+                        <button id="btn-start" class="ctrl-btn start">开始 Start</button>
+                        <button id="btn-pause" class="ctrl-btn pause">暂停 Pause</button>
+                        <button id="btn-reset" class="ctrl-btn reset">重置 Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const canvas = document.getElementById('simCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // Element Refs
+            const sliderM = document.getElementById('m-slider');
+            const sliderV = document.getElementById('v-slider');
+            const valM = document.getElementById('m-val');
+            const valV = document.getElementById('v-val');
+            const symM = document.getElementById('sym-m');
+            const symV = document.getElementById('sym-v');
+            const symP = document.getElementById('sym-p');
+
+            const btnStart = document.getElementById('btn-start');
+            const btnPause = document.getElementById('btn-pause');
+            const btnReset = document.getElementById('btn-reset');
+
+            // State
+            const state = {
+                m: 20,
+                v: 10,
+                ballX: 100,
+                ballY: 0,
+                isPlaying: true
+            };
+
+            // Resize Canvas
+            function resize() {
+                const parent = canvas.parentElement;
+                canvas.width = parent.clientWidth;
+                // Subtract controls height roughly or keep fixed
+                canvas.height = Math.max(400, parent.clientHeight - 130);
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Main Loop
+            function update() {
+                // Update labels
+                valM.textContent = state.m + ' kg';
+                valV.textContent = state.v + ' m/s';
+
+                // Update Formula Size
+                // Base font size + scale * value
+                symM.style.fontSize = (1.5 + state.m / 30) + 'rem';
+                symV.style.fontSize = (1.5 + state.v / 15) + 'rem';
+
+                const p = state.m * state.v;
+                // P size scales with result roughly
+                symP.style.fontSize = (2 + Math.sqrt(p) / 10) + 'rem';
+
+                // Animation Physics
+                if (state.isPlaying && state.v > 0) {
+                    // Move ball
+                    state.ballX += state.v * 0.2; // Scaling factor for speed
+                    if (state.ballX > canvas.width + 100) {
+                        state.ballX = -100;
+                    }
+                }
+
+                draw();
+                requestAnimationFrame(update);
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Background grid/floor
+                const cy = canvas.height / 2;
+
+                // Floor line
+                ctx.beginPath();
+                ctx.strokeStyle = '#eee';
+                ctx.lineWidth = 2;
+                ctx.moveTo(0, cy + 100);
+                ctx.lineTo(canvas.width, cy + 100);
+                ctx.stroke();
+
+                // Calculate Ball Size based on Mass
+                // Base radius 20, max extra 60
+                const r = 20 + (state.m / 100) * 60;
+                const ballY = cy + 100 - r;
+
+                // Draw Ball
+                ctx.beginPath();
+                ctx.arc(state.ballX, ballY, r, 0, Math.PI * 2);
+                const grad = ctx.createRadialGradient(state.ballX - r * 0.3, ballY - r * 0.3, r * 0.1, state.ballX, ballY, r);
+                grad.addColorStop(0, '#5DADE2');
+                grad.addColorStop(1, '#2E86C1');
+                ctx.fillStyle = grad;
+                ctx.fill();
+                ctx.shadowColor = 'rgba(0,0,0,0.2)';
+                ctx.shadowBlur = 15;
+                ctx.shadowOffsetY = 5;
+                ctx.fill();
+                ctx.shadowBlur = 0; // Reset
+                ctx.shadowOffsetY = 0;
+
+                // Mass Label on Ball
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 16px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(state.m + 'kg', state.ballX, ballY);
+
+                // Draw Velocity Vector
+                if (state.v > 0) {
+                    const arrowLen = 60 + state.v * 5;
+                    const arrowStart = state.ballX;
+                    const arrowEnd = state.ballX + arrowLen;
+                    const arrowY = ballY - r - 30; // Above ball
+
+                    ctx.beginPath();
+                    ctx.strokeStyle = '#E74C3C'; // Red for V
+                    ctx.lineWidth = 6;
+                    ctx.moveTo(arrowStart, arrowY);
+                    ctx.lineTo(arrowEnd, arrowY);
+                    ctx.stroke();
+
+                    // Arrow head
+                    ctx.fillStyle = '#E74C3C';
+                    ctx.beginPath();
+                    ctx.moveTo(arrowEnd, arrowY);
+                    ctx.lineTo(arrowEnd - 15, arrowY - 10);
+                    ctx.lineTo(arrowEnd - 15, arrowY + 10);
+                    ctx.fill();
+
+                    // Label V
+                    ctx.font = 'bold 16px Arial';
+                    ctx.fillText('v = ' + state.v + ' m/s', state.ballX + arrowLen / 2, arrowY - 15);
+                }
+
+                // Draw Momentum Label (P)
+                ctx.fillStyle = '#9B59B6'; // Purple for P
+                ctx.font = 'bold 24px Fredoka';
+                ctx.textAlign = 'left';
+                ctx.fillText(`p = ${state.m * state.v} kg·m/s`, 40, 60);
+            }
+
+            // Listeners
+            sliderM.addEventListener('input', (e) => state.m = parseInt(e.target.value));
+            sliderV.addEventListener('input', (e) => state.v = parseInt(e.target.value));
+
+            btnStart.addEventListener('click', () => state.isPlaying = true);
+            btnPause.addEventListener('click', () => state.isPlaying = false);
+            btnReset.addEventListener('click', () => {
+                state.isPlaying = false;
+                state.m = 20;
+                state.v = 10;
+                state.ballX = 100;
+
+                // Update UI
+                sliderM.value = 20;
+                sliderV.value = 10;
+            });
+
+            // Start
+            update();
+
+        </script>
+</body>
+
+</html>
