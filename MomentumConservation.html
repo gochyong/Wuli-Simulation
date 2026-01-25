@@ -251,10 +251,18 @@
         }
 
         .start {
-            background-color: #2ecc71;
+            background-color: var(--primary);
         }
 
         .start:hover {
+            background-color: #ff7a2f;
+        }
+
+        .pause {
+            background-color: #2ecc71;
+        }
+
+        .pause:hover {
             background-color: #27ae60;
         }
 
@@ -540,8 +548,18 @@
         }
 
         sM1.oninput = sM2.oninput = sV1.oninput = sV2.oninput = () => { if (!state.isPlaying) resetSim(); };
-        btnStart.onclick = () => { if (!state.isPlaying) state.isPlaying = true; };
-        btnReset.onclick = resetSim;
+        btnStart.onclick = () => {
+            state.isPlaying = !state.isPlaying;
+            btnStart.textContent = state.isPlaying ? '暂停 Pause' : '开始 Start';
+            btnStart.classList.toggle('start', !state.isPlaying);
+            btnStart.classList.toggle('pause', state.isPlaying);
+        };
+
+        btnReset.onclick = () => {
+            resetSim();
+            btnStart.textContent = '开始 Start';
+            btnStart.className = 'ctrl-btn start';
+        };
 
         resize();
         update();

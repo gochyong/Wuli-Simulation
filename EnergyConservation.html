@@ -410,7 +410,7 @@
                 </div>
 
                 <div class="btn-row">
-                    <button id="btn-start" class="ctrl-btn pause">暂停 Pause</button>
+                    <button id="btn-start" class="ctrl-btn start">开始 Start</button>
                     <button id="btn-reset" class="ctrl-btn reset">重置 Reset</button>
                 </div>
             </div>
@@ -484,7 +484,7 @@
 
         const state = {
             m: 10, h0: 8, g: 9.81, f: 0,
-            time: 0, isPlaying: true,
+            time: 0, isPlaying: false,
             normX: 1, velX: 0,
             currentH: 8, currentV: 0,
             thermalE: 0, totalE: 0,

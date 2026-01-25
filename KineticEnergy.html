@@ -380,7 +380,7 @@
                 </div>
 
                 <div class="btn-row">
-                    <button id="btn-start" class="ctrl-btn start">暂停 Pause</button>
+                    <button id="btn-start" class="ctrl-btn start">开始 Start</button>
                     <button id="btn-reset" class="ctrl-btn reset">重置 Reset</button>
                 </div>
             </div>
@@ -404,7 +404,7 @@
 
         const state = {
             m: 10, v: 5,
-            isPlaying: true,
+            isPlaying: false,
             currentX: 0,
             isFirstRun: true
         };
@@ -553,7 +553,7 @@
         btnReset.onclick = resetSim;
 
         // Initialize button class
-        btnStart.classList.add('pause');
+        btnStart.classList.add('start');
 
         // Initialize position if width available
         if (canvas.clientWidth) {
